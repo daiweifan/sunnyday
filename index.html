@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html class="no-js">
+<head>
+	<title>晴天百日宴</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style type="text/css">
+		@font-face {
+			font-family: digit;
+			src: url('digital-7_mono.ttf') format("truetype");
+		}
+	</style>
+	<link href="css/default.css" type="text/css" rel="stylesheet">
+	<link href="css/style.css" type="text/css" rel="stylesheet">
+	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/garden.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+      <script src="js/prefixfree.min.js"></script>
+      <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+      <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+     
+</head>
+
+<body>
+ 	<audio control="control" loop="loop">
+<source src="music/mylove.ogg" type="audio/ogg" />
+您当前的浏览器不支持播放音频
+</audio> 
+	<audio src="music/mylove.ogg" id="audio" type="audio/ogg" control="control" autoplay loop >您当前的浏览器不支持播放音频</audio>
+	<div id="mainDiv" class="container" style="			background: #ffe;">
+		<div class="row text-center" style="margin-top:20px ;font-size:24px; font-family:Arial,Helvetica,sans-serif;
+       font-size:1em;
+       vertical-align:middle;
+       font-weight:normal" ><h1>戴则奕（晴天）百日宴邀请函</h1></div>
+		<div  class="row" style="height:1300px;">
+			<div class="col-md-6 col-sm-12" >
+				<div class="container1 ">
+					  <img class='photo'  src="images/1.jpg" alt="" style="width:500px;"/>
+					  <img class='photo'  src="images/2.jpg" alt="" style="width:500px;"/>
+					  <img class='photo'  src="images/3.jpg" alt=""  style="width:500px;"/>
+					  <img class='photo'  src="images/4.jpg" alt="" style="width:500px;"/>
+					  <img class='photo'  src="images/5.jpg" alt="" style="width:500px;"/>
+					  <img class='photo'  src="images/6.jpg" alt="" style="width:500px;"/>
+					  <img class='photo'  src="images/7.jpg" alt="" style="width:500px;"/>
+				</div>	
+			</div>
+			<div class="col-md-6 col-sm-12 text-center"  style="height:260px">
+				<div id="code" >
+					<span class="comments">亲朋好友们</span><br />
+					<span class="space"/><span class="comments">吾家有儿初长成，</span><br />
+					<span class="space"/><span class="comments">特邀大家来见证，</span><br />
+					<span class="space"/><span class="comments">设宴就在金鑫苑，</span><br />
+					<span class="space"/><span class="comments">十一点不见不散！</span><br />
+				</div>
+			</div>
+	
+			<div  class="col-md-6 col-sm-12 text-center" style="margin-top:30px;">
+				<div class="row text-center" style="margin-top:20px;">
+					<div class="center-block">
+						<h2>宴请时间</h2>
+						<div class="text-center" style="font-size:30px; ">2019年 8月 31日</div>
+					</div>
+					  
+				</div>	
+				<div id="loveHeart" class="center-block">
+					<canvas id="garden"></canvas>
+					<div id="words">
+						<div id="messages">
+							距离晴天百日宴还剩
+							<div id="elapseClock"></div>
+						</div>
+						<div id="loveu">
+							欢迎大家前来参加<br/>
+							<div class="signature">- 晴天爸爸妈妈</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row text-center" style="margin-top:20px;">
+			<div class="center-block">
+				<h2>设宴地点</h2>
+				<div class="text-center" style="font-size:30px; ">新北区金鑫苑 富贵厅</div>
+ 				<div style="margin:60px;height:550px;border:#ccc solid 1px;" id="dituContent"></div>
+			</div>
+			  
+		</div>	
+		
+		<div id="copyright" class="row" style="margin-bottom:50px;">
+			Copyright © 2019 <a href='http://www.davidinner.top/' style="color:blue;">david</a> 2019-2021
+		</div>
+	</div>
+	 <script type="text/javascript">
+    // 方法1: 现在微信官方已经推出了微信JS-SDK, 最好还是不要使用"野生"方式, 因为不知道什么时候就可以不能用了!
+    // http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+    // 通过config接口注入权限验证配置后, 在 ready 中 play 一下 audio
+    function autoPlayAudio1() {
+        wx.config({
+            // 配置信息, 即使不正确也能使用 wx.ready
+            debug: false,
+            appId: '',
+            timestamp: 1,
+            nonceStr: '',
+            signature: '',
+            jsApiList: []
+        });
+        wx.ready(function() {
+            document.getElementById('audio').play();
+        });
+    }
+    // 方法2: "野生"方法, 借用原来老的 WeixinJSBridge
+    function autoPlayAudio2() {
+        window.onload = function() {
+            // alert(typeof WeixinJSBridge);
+            WeixinJSBridge.invoke('getNetworkType', {}, function(e) {
+                // 在这里拿到 e.err_msg, 这里面就包含了所有的网络类型
+                // alert(e.err_msg);
+                document.getElementById('audio').play();
+            });
+        };
+    }
+    autoPlayAudio1(); // 推荐使用方法1
+    autoPlayAudio2(); // 也可以试一试方法2
+  function toggleSound() {
+            var music = document.getElementById("audio");//获取ID  
+                console.log(music);
+                console.log(music.paused);
+            if (music.paused) { //判读是否播放  
+                music.paused=false;
+                music.play(); //没有就播放 
+            }  
+            
+        }
+toggleSound();
+    </script>
+	<script type="text/javascript">
+		var offsetX = $("#loveHeart").width() / 2;
+		var offsetY = $("#loveHeart").height() / 2 - 55;
+		var together = new Date("2019/08/31");
+		together.setFullYear(2019);
+		together.setHours(11);
+		together.setMinutes(0);
+		together.setSeconds(0);
+		together.setMilliseconds(0);
+		
+		if (!document.createElement('canvas').getContext) {
+			var msg = document.createElement("div");
+			msg.id = "errorMsg";
+			msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+			document.body.appendChild(msg);
+			$("#code").css("display", "none")
+			$("#copyright").css("position", "absolute");
+			$("#copyright").css("bottom", "10px");
+		    document.execCommand("stop");
+		} else {
+			setTimeout(function () {
+				startHeartAnimation();
+			}, 5000);
+			console.log("倒计时时间："+together);
+			timeElapse(together);
+			setInterval(function () {
+				timeElapse(together);
+			}, 500);
+
+			//adjustCodePosition();
+			$("#code").typewriter();
+		}
+
+	</script>
+	<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+    
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(119.864776,31.894582);//定义一个中心点坐标
+        map.centerAndZoom(point,17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+    
+    //地图事件设置函数：
+    function setMapEvent(){
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+    
+    //地图控件添加函数：
+    function addMapControl(){
+        //向地图中添加缩放控件
+	var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+	map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+	var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+	map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+	var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+	map.addControl(ctrl_sca);
+    }
+    
+    //标注点数组
+    var markerArr = [{title:"百日宴酒店",content:"我的备注",point:"119.863348|31.895011",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+		 ];
+    //创建marker
+    function addMarker(){
+        for(var i=0;i<markerArr.length;i++){
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0,p1);
+			var iconImg = createIcon(json.icon);
+            var marker = new BMap.Marker(point,{icon:iconImg});
+			var iw = createInfoWindow(i);
+			var label = new BMap.Label(json.title,{"offset":new BMap.Size(json.icon.lb-json.icon.x+10,-20)});
+			marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                        borderColor:"#808080",
+                        color:"#333",
+                        cursor:"pointer"
+            });
+			
+			(function(){
+				var index = i;
+				var _iw = createInfoWindow(i);
+				var _marker = marker;
+				_marker.addEventListener("click",function(){
+				    this.openInfoWindow(_iw);
+			    });
+			    _iw.addEventListener("open",function(){
+				    _marker.getLabel().hide();
+			    })
+			    _iw.addEventListener("close",function(){
+				    _marker.getLabel().show();
+			    })
+				label.addEventListener("click",function(){
+				    _marker.openInfoWindow(_iw);
+			    })
+				if(!!json.isOpen){
+					label.hide();
+					_marker.openInfoWindow(_iw);
+				}
+			})()
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i){
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>"+json.content+"</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json){
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
+        return icon;
+    }
+    
+    initMap();//创建和初始化地图
+</script>
+</body>
+</html>
